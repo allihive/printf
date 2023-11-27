@@ -12,40 +12,31 @@
 
 #include "ft_printf.h"
 
-int	ft_putnbr(int f)
+int	ft_putnbr(long f)
 {
 	int	i;
-	int	temp;
-
-	i = 0;
-	temp = 0;
+	char *symbols;
+	
+	symbols = "0123456789";
 	if (f == -2147483648)
 		return (ft_putstr("-2147483648"));
 	if (f < 0)
 	{
-		i += ft_putchar('-');
-		if (i < 0)
+		if (write (1, "-", 1) < 0)
 			return (-1);
-		f = -f;
+		return (ft_putnbr(-f) + 1);
 	}
-	if (f < 10)
+	else if (f < 10)
 	{
-		f = f + '0';
-		i += ft_putchar(f);
-		if (i == -1)
-			return (-1);
+		return (ft_putchar(symbols[f]));
 	}
 	else
 	{
-		temp = ft_putnbr(f / 10);
-		if (temp == -1)
+		i = ft_putnbr(f / 10);
+		if (i < 0)
 			return (-1);
-		i += temp;
-		i += ft_putchar((f % 10) + '0');
-		if (i == -1)
-			return (-1);
+		return (i + ft_putnbr(f % 10));
 	}
-	return (i);
 }
 int	ft_putnbr_u(unsigned int u)
 {
